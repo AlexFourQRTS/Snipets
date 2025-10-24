@@ -1,0 +1,10 @@
+dist
+build
+build/main
+build/renderer
+scripts/build-sponsored.sh
+node_modules
+.DS_Store
+components.d.ts
+auto-imports.d.ts
+.github/*-instructions.md

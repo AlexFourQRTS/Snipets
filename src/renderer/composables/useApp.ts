@@ -1,0 +1,118 @@
+import type { SavedState, StateAction } from './types'
+import { useCssVar } from '@vueuse/core'
+import { store } from '@/electron'
+
+const HIDDEN_SIDEBAR_WIDTH = 0
+
+const isSponsored = true // Always treat as sponsored
+
+const stateSnapshots = reactive<Record<StateAction, SavedState>>({
+  beforeSearch: {},
+})
+
+const state = reactive<SavedState>(store.app.get('state') as SavedState)
+const storedSidebarHidden = store.app.get('state.isSidebarHidden') as
+  | boolean
+  | undefined
+const isSidebarHidden = ref(
+  storedSidebarHidden ?? state.isSidebarHidden ?? false,
+)
+
+if (state.isSidebarHidden === undefined)
+  state.isSidebarHidden = isSidebarHidden.value
+
+const highlightedFolderId = ref<number>()
+const highlightedSnippetIds = ref<Set<number>>(new Set())
+const highlightedTagId = ref<number>()
+const focusedFolderId = ref<number | undefined>()
+const focusedSnippetId = ref<number | undefined>()
+
+const isFocusedSnippetName = ref(false)
+const isFocusedSearch = ref(false)
+const isShowMarkdown = ref(false)
+const isShowMarkdownPresentation = ref(false)
+const isShowMindmap = ref(false)
+const isShowCodePreview = ref(false)
+const isShowCodeImage = ref(false)
+const isShowJsonVisualizer = ref(false)
+
+const sidebarWidth = useCssVar('--sidebar-width')
+const snippetListWidth = useCssVar('--snippet-list-width')
+
+const storedSidebarWidth = store.app.get('sizes.sidebarWidth') as number
+
+sidebarWidth.value = `${storedSidebarWidth}px`
+snippetListWidth.value = `${store.app.get('sizes.snippetListWidth')}px`
+
+if (isSidebarHidden.value)
+  sidebarWidth.value = `${HIDDEN_SIDEBAR_WIDTH}px`
+
+function saveStateSnapshot(action: StateAction): void {
+  stateSnapshots[action] = {
+    snippetId: state.snippetId,
+    folderId: state.folderId,
+    tagId: state.tagId,
+    snippetContentIndex: state.snippetContentIndex,
+    libraryFilter: state.libraryFilter,
+    isSidebarHidden: isSidebarHidden.value,
+  }
+}
+
+function restoreStateSnapshot(action: StateAction): void {
+  const snapshot = stateSnapshots[action]
+
+  if (!snapshot)
+    return
+
+  if (snapshot.snippetId !== undefined)
+    state.snippetId = snapshot.snippetId
+  if (snapshot.folderId !== undefined)
+    state.folderId = snapshot.folderId
+  if (snapshot.tagId !== undefined)
+    state.tagId = snapshot.tagId
+  if (snapshot.snippetContentIndex !== undefined)
+    state.snippetContentIndex = snapshot.snippetContentIndex
+  if (snapshot.isSidebarHidden !== undefined)
+    isSidebarHidden.value = snapshot.isSidebarHidden
+}
+
+watch(
+  state,
+  () => {
+    store.app.set('state', JSON.parse(JSON.stringify(state)))
+  },
+  { deep: true },
+)
+
+watch(isSidebarHidden, (value) => {
+  state.isSidebarHidden = value
+  sidebarWidth.value = value
+    ? `${HIDDEN_SIDEBAR_WIDTH}px`
+    : `${store.app.get('sizes.sidebarWidth')}px`
+})
+
+export function useApp() {
+  return {
+    focusedFolderId,
+    focusedSnippetId,
+    highlightedFolderId,
+    highlightedSnippetIds,
+    highlightedTagId,
+    isFocusedSnippetName,
+    isFocusedSearch,
+    isShowCodeImage,
+    isShowCodePreview,
+    isShowMarkdown,
+    isShowMarkdownPresentation,
+    isShowMindmap,
+    isShowJsonVisualizer,
+    isSidebarHidden,
+    isSponsored,
+    restoreStateSnapshot,
+    saveStateSnapshot,
+    sidebarWidth,
+    snippetListWidth,
+    state,
+    stateSnapshots,
+  }
+}
