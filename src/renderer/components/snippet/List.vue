@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { PerfectScrollbarExpose } from 'vue3-perfect-scrollbar'
+import { Plus } from 'lucide-vue-next'
 import { useApp, useGutter, useSnippets } from '@/composables'
 import { i18n, store } from '@/electron'
 import { APP_DEFAULTS } from '~/main/store/constants'
@@ -9,7 +10,7 @@ const gutterRef = ref<{ $el: HTMLElement }>()
 const scrollbarRef = ref<PerfectScrollbarExpose | null>(null)
 
 const { snippetListWidth } = useApp()
-const { displayedSnippets } = useSnippets()
+const { displayedSnippets, createSnippetAndSelect } = useSnippets()
 
 // Оптимизация рендеринга для больших списков
 const visibleSnippets = computed(() => {
@@ -67,10 +68,22 @@ watch(displayedSnippets, () => {
         />
       </div>
     </PerfectScrollbar>
-    <UiEmptyPlaceholder
+    <div
       v-else
-      :text="i18n.t('placeholder.emptySnippetsList')"
-    />
+      class="flex flex-col items-center justify-center h-full space-y-4"
+    >
+      <div class="text-text-muted text-center">
+        {{ i18n.t('placeholder.emptySnippetsList') }}
+      </div>
+      <UiButton
+        variant="primary"
+        size="md"
+        @click="createSnippetAndSelect"
+      >
+        <Plus class="h-4 w-4 mr-2" />
+        {{ i18n.t('action.new.snippet') }}
+      </UiButton>
+    </div>
     <UiGutter ref="gutterRef" />
   </div>
 </template>

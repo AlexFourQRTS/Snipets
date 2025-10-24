@@ -20,6 +20,7 @@ const {
   emptyTrash,
   isRestoreStateBlocked,
   clearSearch,
+  createSnippetAndSelect,
 } = useSnippets()
 const {
   getFolders,
@@ -184,12 +185,20 @@ function onResizeTagList(val: number[]) {
       <div class="text-[10px] font-bold uppercase">
         {{ i18n.t("sidebar.folders") }}
       </div>
-      <UiActionButton
-        :tooltip="i18n.t('action.new.folder')"
-        @click="createFolderAndSelect"
-      >
-        <Plus class="h-4 w-4" />
-      </UiActionButton>
+      <div class="flex space-x-1">
+        <UiActionButton
+          :tooltip="i18n.t('action.new.snippet')"
+          @click="createSnippetAndSelect"
+        >
+          <Plus class="h-4 w-4" />
+        </UiActionButton>
+        <UiActionButton
+          :tooltip="i18n.t('action.new.folder')"
+          @click="createFolderAndSelect"
+        >
+          <Plus class="h-4 w-4" />
+        </UiActionButton>
+      </div>
     </div>
     <SplitterPanel as-child>
       <Tree

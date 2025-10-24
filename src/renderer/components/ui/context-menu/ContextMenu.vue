@@ -4,6 +4,8 @@ import { Plus, Search, FolderPlus, Copy, Code, Eye, Settings, Terminal } from 'l
 import { useApp } from '@/composables'
 import { i18n, ipc } from '@/electron'
 
+console.log('ContextMenu component loaded')
+
 interface MenuItem {
   id: string
   label: string
@@ -126,6 +128,9 @@ const menuItems = computed<MenuItem[]>(() => [
 
 function showMenu(event: MouseEvent) {
   event.preventDefault()
+  event.stopPropagation()
+  
+  console.log('Context menu triggered', event.type, event.target)
   
   // Позиционируем меню так, чтобы оно не выходило за границы экрана
   const x = Math.min(event.clientX, window.innerWidth - 200)
@@ -133,6 +138,7 @@ function showMenu(event: MouseEvent) {
   
   position.value = { x, y }
   isVisible.value = true
+  console.log('Context menu shown at:', { x, y })
 }
 
 function hideMenu() {
@@ -159,14 +165,24 @@ function handleKeydown(event: KeyboardEvent) {
   }
 }
 
+function handleLeftClick(event: MouseEvent) {
+  // Показываем меню при левом клике на пустое поле
+  console.log('Left click detected', event.target)
+  showMenu(event)
+}
+
 onMounted(() => {
+  console.log('ContextMenu mounted, adding event listeners')
   document.addEventListener('contextmenu', showMenu)
+  document.addEventListener('click', handleLeftClick)
   document.addEventListener('click', handleClickOutside)
   document.addEventListener('keydown', handleKeydown)
 })
 
 onUnmounted(() => {
+  console.log('ContextMenu unmounted, removing event listeners')
   document.removeEventListener('contextmenu', showMenu)
+  document.removeEventListener('click', handleLeftClick)
   document.removeEventListener('click', handleClickOutside)
   document.removeEventListener('keydown', handleKeydown)
 })

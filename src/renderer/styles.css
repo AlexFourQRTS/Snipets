@@ -5,6 +5,28 @@
   --editor-tool-header-height: 28px;
 }
 
+/* Стили для системной title bar */
+.titlebar {
+  background-color: var(--color-bg-panel) !important;
+  color: var(--color-text) !important;
+}
+
+/* Стили для системных элементов title bar */
+.titlebar-overlay {
+  background-color: var(--color-bg-panel) !important;
+  color: var(--color-text) !important;
+}
+
+/* Стили для кнопок системной title bar */
+.titlebar-button {
+  background-color: var(--color-bg-panel) !important;
+  color: var(--color-text) !important;
+}
+
+.titlebar-button:hover {
+  background-color: var(--color-list-selection) !important;
+}
+
 /* Стили для title bar */
 [data-title-bar] {
   background-color: var(--color-bg-panel);
@@ -67,6 +89,32 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden; /* Важно для десктопного приложения */
   font-weight: 400; /* Устанавливаем нормальный вес шрифта */
+}
+
+/* Глобальные стили для системной title bar */
+html {
+  background-color: var(--color-bg-panel) !important;
+}
+
+/* Стили для системных элементов */
+.titlebar {
+  background-color: var(--color-bg-panel) !important;
+  color: var(--color-text) !important;
+  border-bottom: 1px solid var(--color-border) !important;
+}
+
+.titlebar-overlay {
+  background-color: var(--color-bg-panel) !important;
+  color: var(--color-text) !important;
+}
+
+.titlebar-button {
+  background-color: var(--color-bg-panel) !important;
+  color: var(--color-text) !important;
+}
+
+.titlebar-button:hover {
+  background-color: var(--color-list-selection) !important;
 }
 
 /* Стили для боковых панелей */
@@ -292,6 +340,34 @@ button:active {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   backdrop-filter: blur(10px);
   animation: contextMenuFadeIn 0.15s ease-out;
+}
+
+/* Стили для пустых областей - подсказка о контекстном меню */
+.empty-area {
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.empty-area:hover {
+  background-color: var(--color-list-selection);
+}
+
+.empty-area::after {
+  content: 'Правый клик для меню';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--color-text-muted);
+  font-size: 0.8em;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.empty-area:hover::after {
+  opacity: 1;
 }
 
 [data-context-menu] button {

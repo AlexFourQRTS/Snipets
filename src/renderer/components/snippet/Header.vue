@@ -74,13 +74,17 @@ function onKeydown(event: KeyboardEvent) {
       >
         <X class="h-4 w-4" />
       </UiButton>
-      <UiActionButton
+      <UiButton
         v-if="!isSearch"
-        :tooltip="i18n.t('action.new.snippet')"
+        variant="primary"
+        size="sm"
+        :title="i18n.t('action.new.snippet')"
         @click="createSnippetAndSelect"
+        class="ml-2"
       >
-        <Plus class="h-4 w-4" />
-      </UiActionButton>
+        <Plus class="h-4 w-4 mr-1" />
+        {{ i18n.t('action.new.snippet') }}
+      </UiButton>
     </div>
   </div>
 </template>

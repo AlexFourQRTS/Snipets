@@ -19,6 +19,7 @@ const {
   selectedSnippet,
   selectedSnippetContent,
   addFragment,
+  createSnippetAndSelect,
   isAvailableToCodePreview,
 } = useSnippets()
 const {
@@ -228,6 +229,12 @@ function onJsonVisualizerToggle() {
           @click="isShowDescription = !isShowDescription"
         >
           <Type class="h-3 w-3" />
+        </UiActionButton>
+        <UiActionButton
+          :tooltip="i18n.t('action.new.snippet')"
+          @click="createSnippetAndSelect"
+        >
+          <Plus class="h-4 w-4" />
         </UiActionButton>
         <UiActionButton
           :tooltip="i18n.t('action.new.fragment')"
