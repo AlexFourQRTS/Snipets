@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "title": "Custom React Hook Example",
+    "language": "React",
+    "date": "2025-10-28",
+    "views": "150",
+    "tags": ["React", "Hook", "Custom"],
+    "category": "web",
+    "code": "import { useState, useEffect } from 'react';\n\nconst useLocalStorage = (key, initialValue) => {\n  const [storedValue, setStoredValue] = useState(() => {\n    try {\n      const item = window.localStorage.getItem(key);\n      return item ? JSON.parse(item) : initialValue;\n    } catch (error) {\n      return initialValue;\n    }\n  });\n\n  const setValue = (value) => {\n    try {\n      setStoredValue(value);\n      window.localStorage.setItem(key, JSON.stringify(value));\n    } catch (error) {\n      console.error(error);\n    }\n  };\n\n  return [storedValue, setValue];\n};\n\nexport default useLocalStorage;",
+    "notes": "**Custom Hook for Local Storage:**\n\n- Automatically syncs with localStorage\n- Handles JSON serialization/deserialization\n- Error handling for invalid JSON\n- TypeScript support available"
+  },
+  {
+    "id": 2,
+    "title": "Python Data Validation",
+    "language": "Python",
+    "date": "2025-10-28",
+    "views": "89",
+    "tags": ["Python", "Validation", "Pydantic"],
+    "category": "backend",
+    "code": "from pydantic import BaseModel, validator\nfrom typing import Optional\n\nclass User(BaseModel):\n    name: str\n    email: str\n    age: Optional[int] = None\n    \n    @validator('email')\n    def validate_email(cls, v):\n        if '@' not in v:\n            raise ValueError('Invalid email format')\n        return v.lower()\n    \n    @validator('age')\n    def validate_age(cls, v):\n        if v is not None and v < 0:\n            raise ValueError('Age cannot be negative')\n        return v",
+    "notes": "**Data Validation with Pydantic:**\n\n- Automatic type checking\n- Custom validators for complex rules\n- Clear error messages\n- Optional fields support"
+  },
+  {
+    "id": 3,
+    "title": "CSS Grid Layout",
+    "language": "CSS",
+    "date": "2025-10-28",
+    "views": "234",
+    "tags": ["CSS", "Grid", "Layout"],
+    "category": "web",
+    "code": ".grid-container {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));\n  gap: 1rem;\n  padding: 1rem;\n}\n\n.grid-item {\n  background: #f0f0f0;\n  padding: 1rem;\n  border-radius: 8px;\n  box-shadow: 0 2px 4px rgba(0,0,0,0.1);\n}",
+    "notes": "**Responsive CSS Grid:**\n\n- Auto-fit columns with minimum width\n- Responsive gap spacing\n- Modern card design\n- Cross-browser compatible"
+  }
+]
